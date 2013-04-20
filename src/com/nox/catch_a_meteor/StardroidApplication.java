@@ -27,6 +27,10 @@ import com.nox.catch_a_meteor.layers.NewMessierLayer;
 import com.nox.catch_a_meteor.layers.NewStarsLayer;
 import com.nox.catch_a_meteor.layers.PlanetsLayer;
 import com.nox.catch_a_meteor.layers.SkyGradientLayer;
+import com.nox.catch_a_meteor.layers.SpaceObjectObservationLayer;
+import com.nox.catch_a_meteor.model.SpaceObjectObservation;
+import com.nox.catch_a_meteor.model.User;
+import com.nox.catch_a_meteor.units.GeocentricCoordinates;
 import com.nox.catch_a_meteor.util.MiscUtil;
 import com.nox.catch_a_meteor.util.OsVersions;
 
@@ -41,7 +45,9 @@ import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
@@ -144,6 +150,12 @@ public class StardroidApplication extends Application {
       layerManager.addLayer(new EclipticLayer(resources));
       layerManager.addLayer(new SkyGradientLayer(getModel(), resources));
       // layerManager.addLayer(new IssLayer(resources, getModel()));
+      
+      User user = new User();
+      ArrayList<SpaceObjectObservation> obsList = new ArrayList<SpaceObjectObservation>();
+      obsList.add(new SpaceObjectObservation(user, "MY OBS", new Date(), 338, -1, 3, "TYPE", "Well Seen", "Comment"));
+      layerManager.addLayer(new SpaceObjectObservationLayer(getModel(), resources, obsList));
+      
       layerManager.initialize();
     } else {
       Log.i(TAG, "LayerManager already initialized.");

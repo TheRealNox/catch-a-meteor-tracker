@@ -20,6 +20,7 @@ import java.util.Date;
 import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import com.nox.catch_a_meteor.units.GeocentricCoordinates;
 
 /**
  * Representation of meteor observation
@@ -48,17 +49,14 @@ public class SpaceObjectObservation {
 	private Date dateObserved;
 	
 	/**
-	 * Coordinates of where the space object started in the sky map
+	 * Coordinates of the space object in the sky map
 	 */
 	@DatabaseField
-	private int startPoint;
+	private float ra;
 	
-	/**
-	 * Coordinates of where the space object ended in the sky map
-	 */
 	@DatabaseField
-	private int endPoint;
-	
+	private float dec;
+		
 	/**
 	 * The magnitude of the observed meteor
 	 */
@@ -76,8 +74,8 @@ public class SpaceObjectObservation {
 	/**
 	 * The reliability of the observation (Well seen, Poorly seen, Other)
 	 */
-	@DatabaseField(dataType = DataType.ENUM_STRING)
-	private ReliabilityType reliability;
+	@DatabaseField
+	private String reliability;
 
 	/**
 	 * Further user comment about the observation
@@ -89,12 +87,12 @@ public class SpaceObjectObservation {
 	public SpaceObjectObservation() {
 	}
 	
-	public SpaceObjectObservation(User user, String title, Date dateObserved, int startPoint, int endPoint, Integer magnitude, String type, ReliabilityType reliability, String comment) {
+	public SpaceObjectObservation(User user, String title, Date dateObserved, float ra, float dec, Integer magnitude, String type, String reliability, String comment) {
 		setUser(user);
 		setTitle(title);
 		setDateObserved(dateObserved);
-		setStartPoint(startPoint);
-		setEndPoint(endPoint);
+		setRa(ra);
+		setDec(dec);
 		setMagnitude(magnitude);
 		setType(type);
 		setReliability(reliability);
@@ -125,22 +123,26 @@ public class SpaceObjectObservation {
 		this.dateObserved = dateObserved;
 	}
 
-	public int getStartPoint() {
-		return startPoint;
+	public float getRa() {
+		return ra;
 	}
 
-	public void setStartPoint(int startPoint) {
-		this.startPoint = startPoint;
+	public void setRa(float ra) {
+		this.ra = ra;
 	}
 
-	public int getEndPoint() {
-		return endPoint;
+	public float getDec() {
+		return dec;
 	}
 
-	public void setEndPoint(int endPoint) {
-		this.endPoint = endPoint;
+	public void setDec(float dec) {
+		this.dec = dec;
 	}
 
+	public GeocentricCoordinates getCoordinates() {
+		return GeocentricCoordinates.getInstance(ra, dec);
+	}
+	
 	public Integer getMagnitude() {
 		return magnitude;
 	}
@@ -157,11 +159,11 @@ public class SpaceObjectObservation {
 		this.type = type;
 	}
 
-	public ReliabilityType getReliability() {
+	public String getReliability() {
 		return reliability;
 	}
 
-	public void setReliability(ReliabilityType reliability) {
+	public void setReliability(String reliability) {
 		this.reliability = reliability;
 	}
 
@@ -180,17 +182,5 @@ public class SpaceObjectObservation {
 
 	public void setUser(User user) {
 		this.user = user;
-	}
-
-
-	/**
-	 * Levels of reliability of a space object observation
-	 * @author Guillaume Prevost
-	 * @since 20th Apr. 2013
-	 */
-	private enum ReliabilityType {
-		WELL_SEEN,
-		POORLY_SEEN,
-		OTHER
 	}
 }

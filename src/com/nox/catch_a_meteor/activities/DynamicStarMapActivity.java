@@ -474,7 +474,8 @@ public class DynamicStarMapActivity extends Activity implements OnSharedPreferen
 
   @Override
   public boolean onTouchEvent(MotionEvent event) {
-    // Log.d(TAG, "Touch event " + event);
+    //Log.d(TAG, "Touch event " + event);
+    Log.d(TAG, "X: " + event.getX() + " Y: " + event.getY());
     // Either of the following detectors can absorb the event, but one
     // must not hide it from the other
     boolean eventAbsorbed = false;
