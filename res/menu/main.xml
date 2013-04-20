@@ -15,41 +15,18 @@
 -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item android:id="@+id/menu_item_search"
-          android:orderInCategory="0"
-          android:title="@string/menu_search"
-          android:icon="@android:drawable/ic_search_category_default"/>
-
-    <item android:id="@+id/menu_item_dim"
-          android:orderInCategory="2"
-          android:title="@string/menu_toggle_dim"
-          android:icon="@android:drawable/ic_menu_view"/>
-
-    <item android:id="@+id/menu_item_settings"
-          android:orderInCategory="3"
-          android:title="@string/menu_settings"
-          android:icon="@android:drawable/ic_menu_preferences"/>
-
-    <item android:id="@+id/menu_item_gallery"
-          android:orderInCategory="4"
-          android:title="@string/menu_gallery"
-          android:icon="@android:drawable/ic_menu_gallery"/>
-
-    <item android:id="@+id/menu_item_time"
-          android:orderInCategory="5"
-          android:title="@string/menu_time"
-          android:icon="@drawable/time_travel_icon"/>
-
-    <item android:id="@+id/menu_item_help"
-          android:orderInCategory="6"
-          android:title="@string/menu_help"
-          android:icon="@android:drawable/ic_menu_info_details"/>
-
-    <!-- TODO(serafini): We need an icon for this? -->
-    <item android:id="@+id/menu_item_tos"
-          android:orderInCategory="7"
-          android:title="@string/menu_tos"/>
+    <item 
+        android:id="@+id/menu_item_news"
+        android:orderInCategory="0"
+        android:title="News"
+		android:icon="@android:drawable/ic_menu_agenda"
+        />
+    <item 
+        android:id="@+id/menu_item_info"
+        android:orderInCategory="1"
+        android:title="Info"
+		android:icon="@android:drawable/ic_menu_info_details"
+        />
 
     <!-- Disable the following for the next release. -->
     <!-- TODO(johntaylor): temporary placement until there's an on-screen button -->

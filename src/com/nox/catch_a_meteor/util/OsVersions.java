@@ -150,8 +150,8 @@ public class OsVersions {
   public static void setSystemStatusBarVisible(View view, boolean visible) {
     try {
       int status = visible ? VIEW_STATUS_BAR_VISIBLE : VIEW_STATUS_BAR_HIDDEN;
-      invokeByReflection(view, new Class[] {int.class}, new Object[] {status},
-                         "setSystemUiVisibility");
+//      invokeByReflection(view, new Class[] {int.class}, new Object[] {status},
+//                         "setSystemUiVisibility");
     } catch (UnsupportedOperationException e) {
       // Doesn't matter.
     }

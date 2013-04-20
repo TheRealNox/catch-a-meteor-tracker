@@ -54,14 +54,17 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -269,16 +272,27 @@ public class DynamicStarMapActivity extends Activity implements OnSharedPreferen
   public boolean onOptionsItemSelected(MenuItem item) {
     super.onOptionsItemSelected(item);
     switch (item.getItemId()) {
+    case R.id.menu_item_news:
+    	break;
+    case R.id.menu_item_info:
+    	break;
+    /*
       case R.id.menu_item_search:
         Log.d(TAG, "Search");
+        Analytics.getInstance(this).trackEvent(Analytics.USER_ACTION_CATEGORY,
+            Analytics.MENU_ITEM, Analytics.SEARCH_REQUESTED_LABEL, 1);
         onSearchRequested();
         break;
       case R.id.menu_item_settings:
         Log.d(TAG, "Settings");
+        Analytics.getInstance(this).trackEvent(Analytics.USER_ACTION_CATEGORY,
+            Analytics.MENU_ITEM, Analytics.SETTINGS_OPENED_LABEL, 1);
         startActivity(new Intent(this, EditSettingsActivity.class));
         break;
       case R.id.menu_item_help:
         Log.d(TAG, "Help");
+        Analytics.getInstance(this).trackEvent(Analytics.USER_ACTION_CATEGORY,
+            Analytics.MENU_ITEM, Analytics.HELP_OPENED_LABEL, 1);
         showDialog(DialogFactory.DIALOG_ID_HELP);
         break;
       case R.id.menu_item_dim:
@@ -286,9 +300,13 @@ public class DynamicStarMapActivity extends Activity implements OnSharedPreferen
         nightMode = !nightMode;
         sharedPreferences.edit().putString(ActivityLightLevelManager.LIGHT_MODE_KEY,
             nightMode ? "NIGHT" : "DAY").commit();
+        Analytics.getInstance(this).trackEvent(Analytics.USER_ACTION_CATEGORY,
+            Analytics.MENU_ITEM, Analytics.TOGGLED_NIGHT_MODE_LABEL, nightMode ? 1 : 0);
         break;
       case R.id.menu_item_time:
         Log.d(TAG, "Starting Time Dialog from menu");
+        Analytics.getInstance(this).trackEvent(Analytics.USER_ACTION_CATEGORY,
+            Analytics.MENU_ITEM, Analytics.TIME_TRAVEL_OPENED_LABEL, 1);
         if (!timePlayerUI.isShown()) {
           Log.d(TAG, "Resetting time in time travel dialog.");
           controller.goTimeTravel(new Date());
@@ -299,12 +317,16 @@ public class DynamicStarMapActivity extends Activity implements OnSharedPreferen
         break;
       case R.id.menu_item_gallery:
         Log.d(TAG, "Loading gallery");
+        Analytics.getInstance(this).trackEvent(Analytics.USER_ACTION_CATEGORY,
+            Analytics.MENU_ITEM, Analytics.GALLERY_OPENED_LABEL, 1);
         startActivity(new Intent(this, ImageGalleryActivity.class));
         break;
       case R.id.menu_item_tos:
         Log.d(TAG, "Loading ToS");
+        Analytics.getInstance(this).trackEvent(Analytics.USER_ACTION_CATEGORY,
+            Analytics.MENU_ITEM, Analytics.TOS_OPENED_LABEL, 1);
         showDialog(DialogFactory.DIALOG_EULA_NO_BUTTONS);
-        break;
+        break;*/
       default:
         Log.e(TAG, "Unwired-up menu item");
         return false;
@@ -534,32 +556,32 @@ public class DynamicStarMapActivity extends Activity implements OnSharedPreferen
     });
 
     final ZoomControls zooms = (ZoomControls) findViewById(R.id.zoom_control);
-    final WidgetFader zoomControlFader = new WidgetFader(new Fadeable() {
-      @Override
-      public void hide() {
-        zooms.hide();
-      }
-
-      @Override
-      public void show() {
-        zooms.show();
-      }
-    });
-    zooms.setOnZoomInClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        controller.zoomIn();
-        zoomControlFader.keepActive();
-      }
-    });
-    zooms.setOnZoomOutClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        controller.zoomOut();
-        zoomControlFader.keepActive();
-      }
-    });
-    zooms.setZoomSpeed(DELAY_BETWEEN_ZOOM_REPEATS_MILLIS);
+//    final WidgetFader zoomControlFader = new WidgetFader(new Fadeable() {
+//      @Override
+//      public void hide() {
+//        zooms.hide();
+//      }
+//
+//      @Override
+//      public void show() {
+//        zooms.show();
+//      }
+//    });
+//    zooms.setOnZoomInClickListener(new OnClickListener() {
+//      @Override
+//      public void onClick(View v) {
+//        controller.zoomIn();
+//        zoomControlFader.keepActive();
+//      }
+//    });
+//    zooms.setOnZoomOutClickListener(new OnClickListener() {
+//      @Override
+//      public void onClick(View v) {
+//        controller.zoomOut();
+//        zoomControlFader.keepActive();
+//      }
+//    });
+//    zooms.setZoomSpeed(DELAY_BETWEEN_ZOOM_REPEATS_MILLIS);
     zooms.hide();
     final ButtonLayerView providerButtons = (ButtonLayerView) findViewById(R.id.layer_buttons_control);
     final WidgetFader layerControlFader = new WidgetFader(providerButtons, 2500);
@@ -575,19 +597,19 @@ public class DynamicStarMapActivity extends Activity implements OnSharedPreferen
       });
     }
     final ButtonLayerView manualButtonLayer = (ButtonLayerView) findViewById(R.id.layer_manual_auto_toggle);
-    final WidgetFader manualControlFader = new WidgetFader(manualButtonLayer);
+//    final WidgetFader manualControlFader = new WidgetFader(manualButtonLayer);
     manualButtonLayer.hide();
-    final ImageButton manualAuto = (ImageButton) findViewById(R.id.manual_auto_toggle);
-    manualAuto.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        manualControlFader.keepActive();
-      }
-    });
+//    final ImageButton manualAuto = (ImageButton) findViewById(R.id.manual_auto_toggle);
+//    manualAuto.setOnClickListener(new OnClickListener() {
+//      @Override
+//      public void onClick(View v) {
+//        manualControlFader.keepActive();
+//      }
+//    });
 
     MapMover mapMover = new MapMover(model, controller, this, sharedPreferences);
     gestureDetector = new GestureDetector(new GestureInterpreter(
-        new WidgetFader[] {manualControlFader, layerControlFader, zoomControlFader},
+        new WidgetFader[] {layerControlFader},
         mapMover));
     dragZoomRotateDetector = new DragRotateZoomGestureDetector(mapMover);
   }

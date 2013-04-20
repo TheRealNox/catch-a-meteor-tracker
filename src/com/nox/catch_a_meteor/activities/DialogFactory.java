@@ -258,7 +258,7 @@ public class DialogFactory {
     final AlertDialog alertDialog = new Builder(parentActivity)
         .setTitle(R.string.load_kml_dialog_title)
         .setView(view)
-        .setNegativeButton("Cancel",
+        .setNegativeButton(R.string.cancel,
             new DialogInterface.OnClickListener() {
               public void onClick(DialogInterface dialog, int whichButton) {
                 Log.d(TAG, "Load Kml Dialog canceled");
