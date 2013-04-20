@@ -13,15 +13,15 @@
       android:title="@string/show_stars_pref" />
     <CheckBoxPreference
       android:key="source_provider.1"
-      android:defaultValue="true"
+      android:defaultValue="false"
       android:title="@string/show_constellations_pref" />
     <CheckBoxPreference
       android:key="source_provider.2"
-      android:defaultValue="true"
+      android:defaultValue="false"
       android:title="@string/show_messier_objects_pref" />
     <CheckBoxPreference
       android:key="source_provider.3"
-      android:defaultValue="true"
+      android:defaultValue="false"
       android:title="@string/show_planets_pref" />
     <CheckBoxPreference
       android:key="source_provider.6"
@@ -29,7 +29,7 @@
       android:title="@string/show_meteors_pref" />
     <CheckBoxPreference
       android:key="source_provider.4"
-      android:defaultValue="true"
+      android:defaultValue="false"
       android:title="@string/show_grid_pref" />
     <CheckBoxPreference
       android:key="source_provider.5"
