@@ -1,3 +1,17 @@
+//
+// International Space Apps Challenge
+//
+// Catch A Meteor
+// 		url: https://code.google.com/p/catch-a-meteor-tracker/
+// 		made by:
+//
+// 			+ Aubry Nicolas (nox.aubry@gmail.com)
+// 			+ Prevost Guillaume (guillaume.prevost.gp@gmail.com)
+//
+// file: HomeActivity.java
+// created: Apr 20, 2013
+//
+
 package com.nox.catch_a_meteor;
 
 import android.os.Bundle;
