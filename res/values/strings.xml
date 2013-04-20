@@ -4,6 +4,11 @@
     <!-- App Settings -->
     <string name="app_name">Catch a Meteor</string>
     <string name="action_settings">Settings</string>
+
+    <!-- Design Strings -->
+    <string name="title_section1_name">Sky Map</string>
+    <string name="title_section2_name">News</string>
+    <string name="title_section3_name">Help</string>
     
     <!-- Intro Text -->
     <string name="intro_picth">We all at one time or another have seen a shooting star zip through the heavens. If you are interested in increasing the odds of seeing this phenomena, there are some important factors you should consider: On an annual scale, from the northern hemisphere, more random (sporadic) meteor activity will occur during the second half of the year. From the southern hemisphere, almost the opposite is true with the first half being more productive. On a daily scale, dusk is the worst time to view meteor activity. </string>
