@@ -14,6 +14,8 @@
 
 package com.nox.catch_a_meteor.activities;
 
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
 import com.nox.catch_a_meteor.R;
 import com.nox.catch_a_meteor.StardroidApplication;
 import com.nox.catch_a_meteor.activities.util.ActivityLightLevelChanger;
@@ -23,8 +25,12 @@ import com.nox.catch_a_meteor.control.AstronomerModel;
 import com.nox.catch_a_meteor.control.AstronomerModel.Pointing;
 import com.nox.catch_a_meteor.control.ControllerGroup;
 import com.nox.catch_a_meteor.control.MagneticDeclinationCalculatorSwitcher;
+import com.nox.catch_a_meteor.dao.DatabaseHelper;
+import com.nox.catch_a_meteor.dao.DatabaseLoader;
 import com.nox.catch_a_meteor.kml.KmlManager;
 import com.nox.catch_a_meteor.layers.LayerManager;
+import com.nox.catch_a_meteor.model.MeteorShowerEvent;
+import com.nox.catch_a_meteor.model.User;
 import com.nox.catch_a_meteor.renderer.RendererController;
 import com.nox.catch_a_meteor.renderer.SkyRenderer;
 import com.nox.catch_a_meteor.renderer.util.AbstractUpdateClosure;
@@ -74,8 +80,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ZoomControls;
 
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -169,6 +177,8 @@ public class DynamicStarMapActivity extends Activity implements OnSharedPreferen
   private ActivityLightLevelManager activityLightLevelManager;
   private long sessionStartTime;
 
+  private DatabaseHelper databaseHelper = null;
+  
   @Override
   public void onCreate(Bundle icicle) {
     Log.d(TAG, "onCreate at " + System.currentTimeMillis());
@@ -220,6 +230,31 @@ public class DynamicStarMapActivity extends Activity implements OnSharedPreferen
       Log.d(TAG, "Started as a result of a search");
       doSearchWithIntent(intent);
     }
+    
+    
+	Collection<User> userList = null;
+	Collection<MeteorShowerEvent> showerList = null;
+	try {
+		Log.d(TAG, "Database Initialization if needed");
+		DatabaseLoader.CreateSchema(getHelper());
+		
+		Dao<MeteorShowerEvent, Integer> meteorShowerEventDao = getHelper().getMeteorShowerEventDao();
+		Dao<User, String> userDao = getHelper().getUserDao();
+		/*User user = new User("gprevost", "Guillaume", "Prevost", new ArrayList<SpaceObjectObservation>());
+		userDao.create(user);*/
+		
+		showerList = meteorShowerEventDao.queryForAll();
+		if (showerList == null || showerList.size() == 0) {
+			DatabaseLoader.LoadMeteorShowers(getHelper());
+		}
+		
+		userList = userDao.queryForAll();
+		showerList = meteorShowerEventDao.queryForAll();
+		
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+    
     Log.d(TAG, "-onCreate at " + System.currentTimeMillis());
   }
 
@@ -235,6 +270,11 @@ public class DynamicStarMapActivity extends Activity implements OnSharedPreferen
   public void onDestroy() {
     Log.d(TAG, "DynamicStarMap onDestroy");
     super.onDestroy();
+    
+    if (databaseHelper != null) {
+      OpenHelperManager.releaseHelper();
+      databaseHelper = null;
+    }
   }
 
   @Override
@@ -755,5 +795,12 @@ public class DynamicStarMapActivity extends Activity implements OnSharedPreferen
 
   public AstronomerModel getModel() {
     return model;
+  }
+	
+  private DatabaseHelper getHelper() {
+    if (databaseHelper == null) {
+      databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+    }
+    return databaseHelper;
   }
 }

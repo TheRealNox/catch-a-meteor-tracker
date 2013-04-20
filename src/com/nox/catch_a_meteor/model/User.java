@@ -15,12 +15,51 @@
 
 package com.nox.catch_a_meteor.model;
 
-public class User extends Storable {
+import java.util.Collection;
 
+import com.j256.ormlite.field.DataType;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
+import com.j256.ormlite.table.DatabaseTable;
+
+/**
+ * Representation of an application user
+ * @author Guillaume Prevost
+ * @since 20th Apr. 2013
+ */
+@DatabaseTable(tableName = "user")
+public class User {
+
+	@DatabaseField(id = true)
 	private String username;
+	
+	@DatabaseField(canBeNull = true, dataType = DataType.STRING)
 	private String firstname;
+	
+	@DatabaseField(canBeNull = true, dataType = DataType.STRING)
 	private String lastname;
 
+	@ForeignCollectionField(eager = false)
+    public Collection<SpaceObjectObservation> observedSpaceObjectList;
+	
+	public User() {
+	}
+	
+	public User(String username, String firstname, String lastname, Collection<SpaceObjectObservation> observedSpaceObjectList) {
+		setObservedSpaceObjectList(observedSpaceObjectList);
+		setUsername(username);
+		setFirstname(firstname);
+		setLastname(lastname);
+	}
+	
+	public String getUsername() {
+		return this.username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
 	public String getFirstname() {
 		return this.firstname;
 	}
@@ -36,12 +75,14 @@ public class User extends Storable {
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
 	}
-
-	public String getUsername() {
-		return this.username;
+	
+	public Collection<SpaceObjectObservation> getObservedSpaceObjectList() {
+		return this.observedSpaceObjectList;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setObservedSpaceObjectList(Collection<SpaceObjectObservation> observedSpaceObjectList) {
+		this.observedSpaceObjectList = observedSpaceObjectList;
 	}
+	
+	
 }

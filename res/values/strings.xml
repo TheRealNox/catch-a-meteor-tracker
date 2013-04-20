@@ -4,6 +4,7 @@
     <!-- App Settings -->
     <string name="app_name">Catch a Meteor</string>
     <string name="action_settings">Settings</string>
+    <string name="open_helper_classname ">com.nox.catch_a_meteor.dao.DatabaseHelper</string>
 
     <!-- Design Strings -->
     <string name="title_section1_name">Sky Map</string>
