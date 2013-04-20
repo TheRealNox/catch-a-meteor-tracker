@@ -25,7 +25,7 @@ dataClass=com.nox.catch_a_meteor.model.SpaceObjectObservation
 tableName=space_object_observation
 # --table-fields-start--
 # --field-start--
-fieldName=id
+fieldName=_id
 generatedId=true
 # --field-end--
 # --field-start--
@@ -62,7 +62,7 @@ dataClass=com.nox.catch_a_meteor.model.MeteorShowerEvent
 tableName=meteor_shower_event
 # --table-fields-start--
 # --field-start--
-fieldName=id
+fieldName=_id
 generatedId=true
 # --field-end--
 # --field-start--

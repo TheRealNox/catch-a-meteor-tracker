@@ -78,7 +78,7 @@ public class StardroidApplication extends Application {
     backgroundExecutor = new ScheduledThreadPoolExecutor(1);
     // This populates the default values from the preferences XML file. See
     // {@link DefaultValues} for more details.
-    PreferenceManager.setDefaultValues(this, R.xml.preference_screen, false);
+    PreferenceManager.setDefaultValues(this, R.xml.preference_screen, true);
 
     AssetManager assetManager = this.getAssets();
     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);

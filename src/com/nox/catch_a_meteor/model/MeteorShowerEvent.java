@@ -33,7 +33,7 @@ import com.j256.ormlite.table.DatabaseTable;
 public class MeteorShowerEvent {
 
 	@DatabaseField(generatedId = true)
-	private Integer id;
+	private Integer _id;
 	
 	/**
 	 * Name of the event. Named for the constellation or closest star within a constellation where
@@ -182,11 +182,11 @@ public class MeteorShowerEvent {
 	}
 
 	public Integer getId() {
-		return id;
+		return _id;
 	}
 
 	public void setId(Integer id) {
-		this.id = id;
+		this._id = id;
 	}
 
 	public String getName() {
