@@ -7,6 +7,10 @@ dataClass=com.nox.catch_a_meteor.model.User
 tableName=user
 # --table-fields-start--
 # --field-start--
+fieldName=_id
+generatedId=true
+# --field-end--
+# --field-start--
 fieldName=username
 id=true
 # --field-end--
@@ -35,10 +39,16 @@ fieldName=title
 fieldName=dateObserved
 # --field-end--
 # --field-start--
-fieldName=startPoint
+fieldName=ra
 # --field-end--
 # --field-start--
-fieldName=endPoint
+fieldName=dec
+# --field-end--
+# --field-start--
+fieldName=raEnd
+# --field-end--
+# --field-start--
+fieldName=decEnd
 # --field-end--
 # --field-start--
 fieldName=magnitude

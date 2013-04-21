@@ -30,7 +30,10 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "user")
 public class User {
 
-	@DatabaseField(id = true)
+	@DatabaseField(generatedId = true)
+	private Integer _id;
+	
+	@DatabaseField
 	private String username;
 	
 	@DatabaseField(canBeNull = true, dataType = DataType.STRING)
@@ -82,6 +85,14 @@ public class User {
 
 	public void setObservedSpaceObjectList(Collection<SpaceObjectObservation> observedSpaceObjectList) {
 		this.observedSpaceObjectList = observedSpaceObjectList;
+	}
+
+	public Integer get_id() {
+		return _id;
+	}
+
+	public void set_id(Integer _id) {
+		this._id = _id;
 	}
 	
 	

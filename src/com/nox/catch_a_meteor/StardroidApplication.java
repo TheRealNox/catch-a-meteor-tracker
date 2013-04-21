@@ -13,10 +13,13 @@
 // limitations under the License.
 package com.nox.catch_a_meteor;
 
-import com.nox.catch_a_meteor.activities.DynamicStarMapActivity;
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
 import com.nox.catch_a_meteor.control.AstronomerModel;
 import com.nox.catch_a_meteor.control.AstronomerModelImpl;
 import com.nox.catch_a_meteor.control.ZeroMagneticDeclinationCalculator;
+import com.nox.catch_a_meteor.dao.DatabaseHelper;
+import com.nox.catch_a_meteor.dao.DatabaseLoader;
 import com.nox.catch_a_meteor.layers.EclipticLayer;
 import com.nox.catch_a_meteor.layers.GridLayer;
 import com.nox.catch_a_meteor.layers.HorizonLayer;
@@ -28,11 +31,9 @@ import com.nox.catch_a_meteor.layers.NewStarsLayer;
 import com.nox.catch_a_meteor.layers.PlanetsLayer;
 import com.nox.catch_a_meteor.layers.SkyGradientLayer;
 import com.nox.catch_a_meteor.layers.SpaceObjectObservationLayer;
+import com.nox.catch_a_meteor.model.MeteorShowerEvent;
 import com.nox.catch_a_meteor.model.SpaceObjectObservation;
-import com.nox.catch_a_meteor.model.User;
-import com.nox.catch_a_meteor.units.GeocentricCoordinates;
 import com.nox.catch_a_meteor.util.MiscUtil;
-import com.nox.catch_a_meteor.util.OsVersions;
 
 import android.app.Application;
 import android.content.Context;
@@ -45,9 +46,8 @@ import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
@@ -69,9 +69,8 @@ public class StardroidApplication extends Application {
   private static LayerManager layerManager;
   private static ExecutorService backgroundExecutor;
 
-  // We need to maintain references to this object to keep it from
-  // getting gc'd.
-
+  private DatabaseHelper databaseHelper = null;
+  
   @Override
   public void onCreate() {
     Log.d(TAG, "StardroidApplication: onCreate");
@@ -81,23 +80,45 @@ public class StardroidApplication extends Application {
         + "(" + android.os.Build.VERSION.SDK + ")");
     String versionName = getVersionName();
     Log.i(TAG, "Sky Map version " + versionName + " build " + getVersion());
+    
+
+    // Set up the database if not ready
+    try {
+		DatabaseLoader.CreateSchemaIfNotExists(getHelper());
+		Dao<MeteorShowerEvent, Integer> meteorShowerEventDao = getHelper().getMeteorShowerEventDao();
+		if (null == meteorShowerEventDao.queryForAll() || meteorShowerEventDao.queryForAll().size() == 0) {
+        	DatabaseLoader.LoadMeteorShowers(getHelper());
+        }
+		Dao<SpaceObjectObservation, Integer> spaceObjectObservationDao = getHelper().getSpaceObjectObservationDao();
+		if (null == spaceObjectObservationDao.queryForAll() || spaceObjectObservationDao.queryForAll().size() == 0) {
+        	DatabaseLoader.LoadObservationExample(getHelper());
+        }
+		List<SpaceObjectObservation> spaceObjectObservations = spaceObjectObservationDao.queryForAll();
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+    
     backgroundExecutor = new ScheduledThreadPoolExecutor(1);
     // This populates the default values from the preferences XML file. See
     // {@link DefaultValues} for more details.
     PreferenceManager.setDefaultValues(this, R.xml.preference_screen, true);
-
+    
     AssetManager assetManager = this.getAssets();
     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
     Resources resources = this.getResources();
     // Start the LayerManager initializing
-    getLayerManager(assetManager, preferences, resources, this);
+    getLayerManager(assetManager, preferences, resources, this, new DatabaseHelper(this));
 
     Log.d(TAG, "StardroidApplication: -onCreate");
   }
 
   @Override
   public void onTerminate() {
-    super.onTerminate();
+	if (databaseHelper != null) {
+		OpenHelperManager.releaseHelper();
+		databaseHelper = null;
+	}
+	super.onTerminate();
   }
 
   /**
@@ -136,7 +157,7 @@ public class StardroidApplication extends Application {
   public static synchronized LayerManager getLayerManager(AssetManager assetManager,
                                                           SharedPreferences preferences,
                                                           Resources resources,
-                                                          Context context) {
+                                                          Context context, DatabaseHelper helper) {
     if (layerManager == null) {
       Log.i(TAG, "Initializing LayerManager");
       layerManager = new LayerManager(preferences, getModel());
@@ -151,10 +172,17 @@ public class StardroidApplication extends Application {
       layerManager.addLayer(new SkyGradientLayer(getModel(), resources));
       // layerManager.addLayer(new IssLayer(resources, getModel()));
       
-      User user = new User();
-      ArrayList<SpaceObjectObservation> obsList = new ArrayList<SpaceObjectObservation>();
-      obsList.add(new SpaceObjectObservation(user, "MY OBS", new Date(), 338, -1, 3, "TYPE", "Well Seen", "Comment"));
-      layerManager.addLayer(new SpaceObjectObservationLayer(getModel(), resources, obsList));
+	  try {
+	    Dao<SpaceObjectObservation, Integer> spaceObjectObservationDao = helper.getSpaceObjectObservationDao();
+		if (null == spaceObjectObservationDao.queryForAll() || spaceObjectObservationDao.queryForAll().size() == 0) {
+        	DatabaseLoader.LoadObservationExample(helper);
+        }
+	    
+	    List<SpaceObjectObservation> spaceObjectObservations = spaceObjectObservationDao.queryForAll();
+	    layerManager.addLayer(new SpaceObjectObservationLayer(getModel(), resources, spaceObjectObservations));
+	  } catch (SQLException e) {
+        e.printStackTrace();
+	  }
       
       layerManager.initialize();
     } else {
@@ -188,4 +216,11 @@ public class StardroidApplication extends Application {
   public static void runInBackground(Runnable runnable) {
     backgroundExecutor.submit(runnable);
   }
+  
+  public DatabaseHelper getHelper() {
+		if (databaseHelper == null) {
+			databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+		}
+		return databaseHelper;
+	}
 }

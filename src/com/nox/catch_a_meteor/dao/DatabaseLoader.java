@@ -1,6 +1,8 @@
 package com.nox.catch_a_meteor.dao;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
 
 import com.j256.ormlite.android.AndroidConnectionSource;
 import com.j256.ormlite.dao.Dao;
@@ -16,10 +18,42 @@ import com.nox.catch_a_meteor.model.MeteorShowerEvent.ShowerClass;
  */
 public class DatabaseLoader {
 
-	public static void CreateSchema(DatabaseHelper helper) throws SQLException {
+	public static void CreateSchemaIfNotExists(DatabaseHelper helper) throws SQLException {
 		TableUtils.createTableIfNotExists(new AndroidConnectionSource(helper), User.class);
 		TableUtils.createTableIfNotExists(new AndroidConnectionSource(helper), SpaceObjectObservation.class);
 		TableUtils.createTableIfNotExists(new AndroidConnectionSource(helper), MeteorShowerEvent.class);
+	}
+
+	public static void CreateSchema(DatabaseHelper helper) throws SQLException {
+		TableUtils.dropTable(new AndroidConnectionSource(helper), User.class, true);
+		TableUtils.createTable(new AndroidConnectionSource(helper), User.class);
+		
+		TableUtils.createTable(new AndroidConnectionSource(helper), SpaceObjectObservation.class);
+		TableUtils.dropTable(new AndroidConnectionSource(helper), User.class, true);
+		
+		TableUtils.createTable(new AndroidConnectionSource(helper), MeteorShowerEvent.class);
+		TableUtils.dropTable(new AndroidConnectionSource(helper), User.class, true);
+	}
+	
+	public static void LoadObservationExample (DatabaseHelper helper) throws SQLException {
+		Dao<User, String> userDao = helper.getUserDao();
+		Dao<SpaceObjectObservation, Integer> spaceObjectObservationDao = helper.getSpaceObjectObservationDao();
+		
+		User user = new User();
+		user.setUsername("gprevost");
+		user.setFirstname("Guillaume");
+		user.setLastname("Prevost");
+		user.setObservedSpaceObjectList(new ArrayList<SpaceObjectObservation>());
+		userDao.create(user);
+		
+		SpaceObjectObservation obs = new SpaceObjectObservation(user, "My Observation", new Date(), 340, -1, 350, -1, 3, "Fireball", "Well Seen", "Amazing !");
+		spaceObjectObservationDao.create(obs);
+		SpaceObjectObservation obs2 = new SpaceObjectObservation(user, "My Observation 2", new Date(), 200, -1, 220, -1, 2, "Meteor", "Well Seen", "Great :)");
+		spaceObjectObservationDao.create(obs);
+		
+		user.getObservedSpaceObjectList().add(obs);
+		user.getObservedSpaceObjectList().add(obs2);
+		userDao.create(user);
 	}
 	
 	public static void LoadMeteorShowers (DatabaseHelper helper) throws SQLException {

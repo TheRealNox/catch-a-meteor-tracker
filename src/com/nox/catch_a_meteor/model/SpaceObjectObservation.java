@@ -56,6 +56,12 @@ public class SpaceObjectObservation {
 	
 	@DatabaseField
 	private float dec;
+	
+	@DatabaseField
+	private float raEnd;
+	
+	@DatabaseField
+	private float decEnd;
 		
 	/**
 	 * The magnitude of the observed meteor
@@ -87,7 +93,7 @@ public class SpaceObjectObservation {
 	public SpaceObjectObservation() {
 	}
 	
-	public SpaceObjectObservation(User user, String title, Date dateObserved, float ra, float dec, Integer magnitude, String type, String reliability, String comment) {
+	public SpaceObjectObservation(User user, String title, Date dateObserved, float ra, float dec, float raEnd, float decEnd, Integer magnitude, String type, String reliability, String comment) {
 		setUser(user);
 		setTitle(title);
 		setDateObserved(dateObserved);
@@ -138,9 +144,29 @@ public class SpaceObjectObservation {
 	public void setDec(float dec) {
 		this.dec = dec;
 	}
-
+	
 	public GeocentricCoordinates getCoordinates() {
 		return GeocentricCoordinates.getInstance(ra, dec);
+	}
+	
+	public float getRaEnd() {
+		return raEnd;
+	}
+
+	public void setRaEnd(float raEnd) {
+		this.raEnd = raEnd;
+	}
+
+	public float getDecEnd() {
+		return decEnd;
+	}
+
+	public void setDecEnd(float decEnd) {
+		this.decEnd = decEnd;
+	}
+
+	public GeocentricCoordinates getCoordinatesEnd() {
+		return GeocentricCoordinates.getInstance(raEnd, decEnd);
 	}
 	
 	public Integer getMagnitude() {

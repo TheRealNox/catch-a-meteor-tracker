@@ -23,6 +23,7 @@ import com.nox.catch_a_meteor.control.AstronomerModel;
 import com.nox.catch_a_meteor.control.AstronomerModel.Pointing;
 import com.nox.catch_a_meteor.control.ControllerGroup;
 import com.nox.catch_a_meteor.control.MagneticDeclinationCalculatorSwitcher;
+import com.nox.catch_a_meteor.dao.DatabaseHelper;
 import com.nox.catch_a_meteor.kml.KmlManager;
 import com.nox.catch_a_meteor.layers.LayerManager;
 import com.nox.catch_a_meteor.model.MeteorShowerEvent;
@@ -192,7 +193,7 @@ public class DynamicStarMapActivity extends Activity implements OnSharedPreferen
     layerManager = StardroidApplication.getLayerManager(getAssets(),
                                                         sharedPreferences,
                                                         getResources(),
-                                                        this);
+                                                        this, new DatabaseHelper(this));
     initializeModelViewController();
     // We want to reset to auto mode on every restart, as users seem to get
     // stuck in manual mode and can't find their way out.
