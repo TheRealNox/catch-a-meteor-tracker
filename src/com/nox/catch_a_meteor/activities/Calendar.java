@@ -15,24 +15,25 @@
 package com.nox.catch_a_meteor.activities;
 
 import java.sql.SQLException;
-import java.util.Collection;
 
 import com.j256.ormlite.android.AndroidDatabaseResults;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
+import com.nox.catch_a_meteor.IntentHelper;
 import com.nox.catch_a_meteor.db.util.MyCustomCursorAdapter;
 import com.nox.catch_a_meteor.R;
-import com.nox.catch_a_meteor.StardroidApplication;
 import com.nox.catch_a_meteor.dao.DatabaseHelper;
 import com.nox.catch_a_meteor.dao.DatabaseLoader;
 import com.nox.catch_a_meteor.model.MeteorShowerEvent;
-import com.nox.catch_a_meteor.model.User;
 
 import android.app.Activity;
-import android.database.Cursor;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class Calendar extends Activity {
 
@@ -68,6 +69,15 @@ public class Calendar extends Activity {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		
+		mMeteorShowerList.setOnItemClickListener(new OnItemClickListener() {
+	    	@Override
+	    	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+	    		Log.d(TAG, "mMeteorShowerList item clicked at " + position + " with id:" + id);
+	    		launchEventViewer(id);
+	    	}
+	    });
+	
 	}
 
 	@Override
@@ -87,7 +97,13 @@ public class Calendar extends Activity {
 		}
 		super.onDestroy();
 	}
-
+	
+    protected void launchEventViewer(long id) {
+    	Log.v(TAG, "launchEventViewer");
+    	Intent i = new Intent(this, EventViewer.class);
+    	IntentHelper.addObjectForKey(id, "id");
+    	startActivity(i);
+    }
    public DatabaseHelper getHelper() {
 		if (databaseHelper == null) {
 			databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);

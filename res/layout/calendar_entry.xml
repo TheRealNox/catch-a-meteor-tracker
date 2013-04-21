@@ -8,26 +8,25 @@
         android:id="@+id/calendarEntryName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@+id/calendarEntryName" />
+        android:text="@+id/calendarEntryName"
+        android:textSize="@dimen/menu_text_size" />
 
-<!--     <LinearLayout -->
-<!--         android:layout_width="match_parent" -->
-<!--         android:layout_height="wrap_content" > -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-<!--         <TextView -->
-<!--             android:id="@+id/eventEntryAttendeesNbr" -->
-<!--             android:layout_width="wrap_content" -->
-<!--             android:layout_height="wrap_content" -->
-<!--             android:text="@+id/eventAttendeesNbr" /> -->
-<!-- 	    <TextView -->
-<!-- 	        android:id="@+id/eventEntryDate" -->
-<!-- 	        android:layout_width="0dip" -->
-<!-- 	        android:layout_height="wrap_content" -->
-<!-- 	        android:layout_gravity="right" -->
-<!-- 	        android:layout_weight="1" -->
-<!-- 	        android:gravity="right" -->
-<!-- 	        android:text="@+id/eventEntryDate" /> -->
-
-<!-- 	 </LinearLayout> -->
-
+        <TextView
+            android:id="@+id/calendarPeakNight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@+id/calendarPeakNight" />
+	    <TextView
+	        android:id="@+id/calendarFullNight"
+	        android:layout_width="0dip"
+	        android:layout_height="wrap_content"
+	        android:layout_gravity="right"
+	        android:layout_weight="1"
+	        android:gravity="right"
+	        android:text="@+id/calendarFullNight" />
+	 </LinearLayout>
 </LinearLayout>

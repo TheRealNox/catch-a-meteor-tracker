@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Info$HowToFragment" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+  
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/help_use_title"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+        <View
+		    android:layout_width="fill_parent"
+	    	android:layout_height="10.1dp"
+	    	android:background="#FF33b5e5"
+            android:alpha="0"
+   			/>
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/help_use_cal"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        <View
+		    android:layout_width="fill_parent"
+	    	android:layout_height="5dp"
+	    	android:background="#FF33b5e5"
+            android:alpha="0"
+   			/>
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/help_use_watch"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        <View
+		    android:layout_width="fill_parent"
+	    	android:layout_height="5dp"
+	    	android:background="#FF33b5e5"
+            android:alpha="0"
+   			/>
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/help_use_map"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        <View
+		    android:layout_width="fill_parent"
+	    	android:layout_height="5dp"
+	    	android:background="#FF33b5e5"
+            android:alpha="0"
+   			/>
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/help_use_record"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        <View
+		    android:layout_width="fill_parent"
+	    	android:layout_height="5dp"
+	    	android:background="#FF33b5e5"
+            android:alpha="0"
+   			/>
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/help_use_learn"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        
+        </LinearLayout>
+
+</ScrollView>

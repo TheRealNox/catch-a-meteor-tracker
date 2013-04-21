@@ -283,6 +283,7 @@ public class DynamicStarMapActivity extends Activity implements OnSharedPreferen
     	startActivity(new Intent(this, Calendar.class));
     	break;
     case R.id.menu_item_info:
+    	startActivity(new Intent(this, Info.class));
     	break;
     /*
       case R.id.menu_item_search:
