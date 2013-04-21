@@ -99,6 +99,8 @@ public class SpaceObjectObservation {
 		setDateObserved(dateObserved);
 		setRa(ra);
 		setDec(dec);
+		setRaEnd(raEnd);
+		setDecEnd(decEnd);
 		setMagnitude(magnitude);
 		setType(type);
 		setReliability(reliability);

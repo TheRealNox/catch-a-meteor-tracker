@@ -24,8 +24,8 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	private static final String DATABASE_NAME = "catch_a_meteor.db";
 	private static final int DATABASE_VERSION = 1;
 
-	private Dao<User, String> userDao = null;
-	private RuntimeExceptionDao<User, String> userRuntimeDao = null;
+	private Dao<User, Integer> userDao = null;
+	private RuntimeExceptionDao<User, Integer> userRuntimeDao = null;
 	private Dao<SpaceObjectObservation, Integer> spaceObjectObservationDao = null;
 	private RuntimeExceptionDao<SpaceObjectObservation, Integer> spaceObjectObservationRuntimeDao = null;
 	private Dao<MeteorShowerEvent, Integer> meteorShowerEventDao = null;
@@ -70,7 +70,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	 * Returns the Database Access Object (DAO) for User class. 
 	 * It will create it or just give the cached value.
 	 */
-	public Dao<User, String> getUserDao() throws SQLException {
+	public Dao<User, Integer> getUserDao() throws SQLException {
 		if (userDao == null) {
 			userDao = getDao(User.class);
 		}
@@ -81,7 +81,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 	 * Returns the RuntimeExceptionDao (Database Access Object) version of a Dao for User class. 
 	 * It will create it or just give the cached value. RuntimeExceptionDao only through RuntimeExceptions.
 	 */
-	public RuntimeExceptionDao<User, String> getUserRuntimeDao() {
+	public RuntimeExceptionDao<User, Integer> getUserRuntimeDao() {
 		if (userRuntimeDao == null) {
 			userRuntimeDao = getRuntimeExceptionDao(User.class);
 		}

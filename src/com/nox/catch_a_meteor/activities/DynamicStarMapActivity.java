@@ -14,6 +14,7 @@
 
 package com.nox.catch_a_meteor.activities;
 
+import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.nox.catch_a_meteor.R;
 import com.nox.catch_a_meteor.StardroidApplication;
 import com.nox.catch_a_meteor.activities.util.ActivityLightLevelChanger;
@@ -27,6 +28,7 @@ import com.nox.catch_a_meteor.dao.DatabaseHelper;
 import com.nox.catch_a_meteor.kml.KmlManager;
 import com.nox.catch_a_meteor.layers.LayerManager;
 import com.nox.catch_a_meteor.model.MeteorShowerEvent;
+import com.nox.catch_a_meteor.model.SpaceObjectObservation;
 import com.nox.catch_a_meteor.model.User;
 import com.nox.catch_a_meteor.renderer.RendererController;
 import com.nox.catch_a_meteor.renderer.SkyRenderer;
@@ -52,6 +54,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
 import android.media.MediaPlayer;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
@@ -90,7 +94,8 @@ import java.util.List;
  */
 public class DynamicStarMapActivity extends Activity implements OnSharedPreferenceChangeListener {
   private static final int TIME_DISPLAY_DELAY_MILLIS = 1000;
-
+  private DatabaseHelper databaseHelper = null;
+  
   /**
    * Passed to the renderer to get per-frame updates from the model.
    *
@@ -477,10 +482,15 @@ public class DynamicStarMapActivity extends Activity implements OnSharedPreferen
   public boolean onTouchEvent(MotionEvent event) {
     //Log.d(TAG, "Touch event " + event);
     Log.d(TAG, "X: " + event.getX() + " Y: " + event.getY());
+    Log.d(TAG, "Orientation: " + getResources().getConfiguration().orientation);
+    
     // Either of the following detectors can absorb the event, but one
     // must not hide it from the other
     boolean eventAbsorbed = false;
     if (gestureDetector.onTouchEvent(event)) {
+      
+      /*SpaceObjectObservation obs = new SpaceObjectObservation(user, title, dateObserved, ra, dec, raEnd, decEnd, magnitude, type, reliability, comment)
+      getHelper().getSpaceObjectObservationDao().create(obs);*/
       eventAbsorbed = true;
     }
     if (dragZoomRotateDetector.onTouchEvent(event)) {
@@ -765,4 +775,11 @@ public class DynamicStarMapActivity extends Activity implements OnSharedPreferen
   public AstronomerModel getModel() {
     return model;
   }
+  
+  public DatabaseHelper getHelper() {
+		if (databaseHelper == null) {
+			databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
+		}
+		return databaseHelper;
+	}
 }
