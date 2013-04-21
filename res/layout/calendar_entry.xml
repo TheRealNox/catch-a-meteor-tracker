@@ -8,6 +8,7 @@
         android:id="@+id/calendarEntryName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:text="@+id/calendarEntryName"
         android:textSize="@dimen/menu_text_size" />
 

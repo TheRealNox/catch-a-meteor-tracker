@@ -147,6 +147,7 @@ public class MeteorShowerEvent {
 		setRadiantRightAscension(radiantRightAscension);
 		setRadiantDeclinaison(RadiantDeclinaison);
 		setSolarLongitude(solarLongitude);
+		setVelocity(velocity);
 		setMoon(moon);
 		setZenithHourlyRate(zenithHourlyRate);
 	}
@@ -177,6 +178,7 @@ public class MeteorShowerEvent {
 		setRadiantRightAscension(radiantRightAscension);
 		setRadiantDeclinaison(RadiantDeclinaison);
 		setSolarLongitude(solarLongitude);
+		setVelocity(velocity);
 		setMoon(moon);
 		setZenithHourlyRate(zenithHourlyRate);
 	}

@@ -3,4 +3,74 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
+
+    <LinearLayout
+	    android:layout_width="match_parent"
+ 		   android:layout_height="wrap_content"
+ 		   android:orientation="vertical" 
+        >
+    
+    <TextView
+        android:id="@+id/calendarViewName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@+id/calendarViewName"
+        android:textSize="@dimen/menu_text_size" />
+
+    <TextView
+        android:id="@+id/calendarViewDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@+id/calendarViewDescription" />
+
+    <TextView
+        android:id="@+id/calendarViewParent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@+id/calendarViewParent" />
+
+    <TextView
+        android:id="@+id/calendarViewFull"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@+id/calendarViewFull" />
+
+    <TextView
+        android:id="@+id/calendarViewPeak"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@+id/calendarViewPeak" />
+
+    <TextView
+        android:id="@+id/calendarViewVelocity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@+id/calendarViewVelocity" />
+
+    <TextView
+        android:id="@+id/calendarViewRadiantRight"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@+id/calendarViewRadiantRight" />
+
+    <TextView
+        android:id="@+id/calendarViewRadiantDepth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@+id/calendarViewRadiantDepth" />
+
+     <TextView
+        android:id="@+id/calendarViewSolar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@+id/calendarViewSolar" />
+
+    <TextView
+        android:id="@+id/calendarViewZenith"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@+id/calendarViewZenith" />
+ 
+    </LinearLayout>
 </ScrollView>

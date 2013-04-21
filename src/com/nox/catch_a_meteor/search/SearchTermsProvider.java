@@ -76,7 +76,10 @@ public class SearchTermsProvider extends ContentProvider {
   public boolean onCreate() {
     Context context = getContext();
     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-    /*layerManager = StardroidApplication.getLayerManager(context.getAssets(), preferences,
+
+    /*
+    //TODO(Fix that shit!)
+    layerManager = StardroidApplication.getLayerManager(context.getAssets(), preferences,
                                                         context.getResources(), context);*/
     return true;
   }
