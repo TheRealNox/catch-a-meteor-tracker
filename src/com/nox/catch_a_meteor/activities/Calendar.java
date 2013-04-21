@@ -22,6 +22,7 @@ import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
 import com.nox.catch_a_meteor.db.util.MyCustomCursorAdapter;
 import com.nox.catch_a_meteor.R;
+import com.nox.catch_a_meteor.StardroidApplication;
 import com.nox.catch_a_meteor.dao.DatabaseHelper;
 import com.nox.catch_a_meteor.dao.DatabaseLoader;
 import com.nox.catch_a_meteor.model.MeteorShowerEvent;
@@ -37,12 +38,11 @@ public class Calendar extends Activity {
 
 	public static final String TAG = "CalendarActivity";
 
-	private DatabaseHelper databaseHelper = null;
 	private MyCustomCursorAdapter mCustomAdapter;
 	private Dao<MeteorShowerEvent, Integer> mMeteorShowerEventDao;
 	private ListView mMeteorShowerList;
 
-	
+	private DatabaseHelper databaseHelper = null;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,16 +54,8 @@ public class Calendar extends Activity {
 		
 		try {
 			Log.d(TAG, "Database Initialization if needed");
-			DatabaseLoader.CreateSchema(getHelper());
 
 			mMeteorShowerEventDao = getHelper().getMeteorShowerEventDao();
-			
-			Dao<User, String> userDao = getHelper().getUserDao();
-			/*
-			 * User user = new User("gprevost", "Guillaume", "Prevost", new
-			 * ArrayList<SpaceObjectObservation>()); userDao.create(user);
-			 */
-
 			if (null == mMeteorShowerEventDao.queryForAll() || mMeteorShowerEventDao.queryForAll().size() == 0) {
 				DatabaseLoader.LoadMeteorShowers(getHelper());
 			}
@@ -89,18 +81,16 @@ public class Calendar extends Activity {
 	@Override
 	public void onDestroy() {
 		Log.d(TAG, "Activity State: onDestroy()");
-		super.onDestroy();
-
 		if (databaseHelper != null) {
 			OpenHelperManager.releaseHelper();
 			databaseHelper = null;
 		}
+		super.onDestroy();
 	}
 
-  private DatabaseHelper getHelper() {
+   public DatabaseHelper getHelper() {
 		if (databaseHelper == null) {
-			databaseHelper = OpenHelperManager.getHelper(this,
-					DatabaseHelper.class);
+			databaseHelper = OpenHelperManager.getHelper(this, DatabaseHelper.class);
 		}
 		return databaseHelper;
 	}
