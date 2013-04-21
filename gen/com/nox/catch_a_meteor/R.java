@@ -261,10 +261,10 @@ containing a value of this type.
         public static final int time_travel_speed_label=0x7f0d002f;
         public static final int time_travel_status_label=0x7f0d0028;
         public static final int time_travel_time_readout=0x7f0d0029;
+        public static final int utc_time_display=0x7f0d001d;
         public static final int view_mask=0x7f0d0013;
         public static final int webview=0x7f0d0030;
         public static final int zoom_and_manual_bar=0x7f0d001a;
-        public static final int zoom_control=0x7f0d001d;
     }
     public static final class layout {
         public static final int activity_calendar=0x7f030000;

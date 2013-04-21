@@ -193,11 +193,18 @@
               catch_a_meteor:image_off="@drawable/automaticmode"
               catch_a_meteor:default_value="true"/>
         </com.nox.catch_a_meteor.views.ButtonLayerView>
-        <ZoomControls
+<!--         <ZoomControls -->
+<!--             android:layout_width="wrap_content" -->
+<!--             android:layout_height="wrap_content" -->
+<!--             android:id="@+id/zoom_control" -->
+<!--             android:layout_gravity="bottom|center_horizontal" /> -->
+		<TextView
+         	android:id="@+id/utc_time_display"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/zoom_control"
-            android:layout_gravity="bottom|center_horizontal" />
+            android:layout_gravity="bottom|center_horizontal" 
+            android:layout_marginBottom="2dip"
+            android:text="" />
       </FrameLayout>
     </RelativeLayout>
   </FrameLayout>

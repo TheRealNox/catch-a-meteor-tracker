@@ -33,7 +33,7 @@ public class SpaceObjectObservationLayer extends AbstractSourceLayer {
 
   private final AstronomerModel model;
   
-  private static final int LINE_COLOR = Color.argb(255, 255, 255, 255);
+  private static final int LINE_COLOR = Color.argb(255, 0, 220, 0);
   
   public SpaceObjectObservationLayer(AstronomerModel model, Resources resources, List<SpaceObjectObservation> spaceObjectObservations) {
     super(resources, true);

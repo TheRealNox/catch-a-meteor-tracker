@@ -88,6 +88,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * The main map-rendering Activity.
@@ -483,7 +484,8 @@ public class DynamicStarMapActivity extends Activity implements OnSharedPreferen
   public boolean onTouchEvent(MotionEvent event) {
     //Log.d(TAG, "Touch event " + event);
     Log.d(TAG, "X: " + event.getX() + " Y: " + event.getY());
-    Log.d(TAG, "Orientation: " + getResources().getConfiguration().orientation);
+    //Log.d(TAG, "Orientation: " + getResources().getConfiguration().orientation);
+    Log.d(TAG, "Line of sight X: " + model.getPointing().getLineOfSightX());
     
     // Either of the following detectors can absorb the event, but one
     // must not hide it from the other
@@ -570,34 +572,24 @@ public class DynamicStarMapActivity extends Activity implements OnSharedPreferen
       }
     });
 
-    final ZoomControls zooms = (ZoomControls) findViewById(R.id.zoom_control);
-//    final WidgetFader zoomControlFader = new WidgetFader(new Fadeable() {
-//      @Override
-//      public void hide() {
-//        zooms.hide();
-//      }
-//
-//      @Override
-//      public void show() {
-//        zooms.show();
-//      }
-//    });
-//    zooms.setOnZoomInClickListener(new OnClickListener() {
-//      @Override
-//      public void onClick(View v) {
-//        controller.zoomIn();
-//        zoomControlFader.keepActive();
-//      }
-//    });
-//    zooms.setOnZoomOutClickListener(new OnClickListener() {
-//      @Override
-//      public void onClick(View v) {
-//        controller.zoomOut();
-//        zoomControlFader.keepActive();
-//      }
-//    });
-//    zooms.setZoomSpeed(DELAY_BETWEEN_ZOOM_REPEATS_MILLIS);
-    zooms.hide();
+    final TextView txtTimeUtc = (TextView) findViewById(R.id.utc_time_display);
+    
+    final WidgetFader txtTimeUtcFader = new WidgetFader(new Fadeable() {
+      @Override
+      public void hide() {
+        txtTimeUtc.setVisibility(View.INVISIBLE);
+      }
+
+      @Override
+      public void show() {
+    	 SimpleDateFormat dateFormatUtc = new SimpleDateFormat("dd MMM yyyy - HH:mm:ss z");
+    	 dateFormatUtc.setTimeZone(TimeZone.getTimeZone("UTC"));
+    	 
+    	 txtTimeUtc.setText(dateFormatUtc.format(new Date()));
+    	 txtTimeUtc.setVisibility(View.VISIBLE);
+      }
+    });
+    txtTimeUtc.setVisibility(View.INVISIBLE);
     final ButtonLayerView providerButtons = (ButtonLayerView) findViewById(R.id.layer_buttons_control);
     final WidgetFader layerControlFader = new WidgetFader(providerButtons, 2500);
     providerButtons.hide();
@@ -624,7 +616,7 @@ public class DynamicStarMapActivity extends Activity implements OnSharedPreferen
 
     MapMover mapMover = new MapMover(model, controller, this, sharedPreferences);
     gestureDetector = new GestureDetector(new GestureInterpreter(
-        new WidgetFader[] {layerControlFader},
+        new WidgetFader[] {layerControlFader, txtTimeUtcFader},
         mapMover));
     dragZoomRotateDetector = new DragRotateZoomGestureDetector(mapMover);
   }
