@@ -27,9 +27,6 @@ import com.nox.catch_a_meteor.control.MagneticDeclinationCalculatorSwitcher;
 import com.nox.catch_a_meteor.dao.DatabaseHelper;
 import com.nox.catch_a_meteor.kml.KmlManager;
 import com.nox.catch_a_meteor.layers.LayerManager;
-import com.nox.catch_a_meteor.model.MeteorShowerEvent;
-import com.nox.catch_a_meteor.model.SpaceObjectObservation;
-import com.nox.catch_a_meteor.model.User;
 import com.nox.catch_a_meteor.renderer.RendererController;
 import com.nox.catch_a_meteor.renderer.SkyRenderer;
 import com.nox.catch_a_meteor.renderer.util.AbstractUpdateClosure;
@@ -53,26 +50,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.database.Cursor;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
 import android.media.MediaPlayer;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -80,12 +71,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ZoomControls;
 
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -142,7 +130,7 @@ public class DynamicStarMapActivity extends Activity implements OnSharedPreferen
   private static final String BUNDLE_Z_TARGET = "bundle_z_target";
   private static final String BUNDLE_SEARCH_MODE = "bundle_search";
   private static final String SOUND_EFFECTS = "sound_effects";
-  private static final int DELAY_BETWEEN_ZOOM_REPEATS_MILLIS = 100;
+//  private static final int DELAY_BETWEEN_ZOOM_REPEATS_MILLIS = 100;
   private static final float ROTATION_SPEED = 10;
   private static final String TAG = MiscUtil.getTag(DynamicStarMapActivity.class);
   // Preference that keeps track of whether or not the user accepted the ToS
@@ -483,9 +471,13 @@ public class DynamicStarMapActivity extends Activity implements OnSharedPreferen
   @Override
   public boolean onTouchEvent(MotionEvent event) {
     //Log.d(TAG, "Touch event " + event);
+	Log.d(TAG, "      ");
+	Log.d(TAG, "      ");
+	Log.d(TAG, "-------------------------------------");
     Log.d(TAG, "X: " + event.getX() + " Y: " + event.getY());
     //Log.d(TAG, "Orientation: " + getResources().getConfiguration().orientation);
     Log.d(TAG, "Line of sight X: " + model.getPointing().getLineOfSightX());
+    Log.d(TAG, "Perpendicular X: " + model.getPointing().getPerpendicularX());
     
     // Either of the following detectors can absorb the event, but one
     // must not hide it from the other

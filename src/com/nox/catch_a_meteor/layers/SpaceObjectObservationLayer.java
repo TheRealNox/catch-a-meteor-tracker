@@ -100,7 +100,6 @@ public class SpaceObjectObservationLayer extends AbstractSourceLayer {
       line.vertices.add(spaceObjectObservation.getCoordinatesEnd());
       
       lineSources.add(line);
-      
       textSources.add(new TextSourceImpl(spaceObjectObservation.getCoordinates(), name, LABEL_COLOR));
     }
 
