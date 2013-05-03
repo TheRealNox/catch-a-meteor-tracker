@@ -15,6 +15,8 @@
 package com.nox.catch_a_meteor.activities;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
+import com.nox.catch_a_meteor.IntentHelper;
 import com.nox.catch_a_meteor.R;
 import com.nox.catch_a_meteor.StardroidApplication;
 import com.nox.catch_a_meteor.activities.util.ActivityLightLevelChanger;
@@ -25,8 +27,12 @@ import com.nox.catch_a_meteor.control.AstronomerModel.Pointing;
 import com.nox.catch_a_meteor.control.ControllerGroup;
 import com.nox.catch_a_meteor.control.MagneticDeclinationCalculatorSwitcher;
 import com.nox.catch_a_meteor.dao.DatabaseHelper;
+
 import com.nox.catch_a_meteor.kml.KmlManager;
 import com.nox.catch_a_meteor.layers.LayerManager;
+
+import com.nox.catch_a_meteor.model.SpaceObjectObservation;
+import com.nox.catch_a_meteor.model.User;
 import com.nox.catch_a_meteor.renderer.RendererController;
 import com.nox.catch_a_meteor.renderer.SkyRenderer;
 import com.nox.catch_a_meteor.renderer.util.AbstractUpdateClosure;
@@ -35,6 +41,7 @@ import com.nox.catch_a_meteor.touch.DragRotateZoomGestureDetector;
 import com.nox.catch_a_meteor.touch.GestureInterpreter;
 import com.nox.catch_a_meteor.touch.MapMover;
 import com.nox.catch_a_meteor.units.GeocentricCoordinates;
+
 import com.nox.catch_a_meteor.units.Vector3;
 import com.nox.catch_a_meteor.util.MathUtil;
 import com.nox.catch_a_meteor.util.MiscUtil;
@@ -52,11 +59,14 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.media.MediaPlayer;
 import android.opengl.GLSurfaceView;
+import android.opengl.GLU;
+import android.opengl.Matrix;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Display;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -72,11 +82,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
+
 
 /**
  * The main map-rendering Activity.
@@ -274,57 +286,6 @@ public class DynamicStarMapActivity extends Activity implements OnSharedPreferen
     case R.id.menu_item_info:
     	startActivity(new Intent(this, Info.class));
     	break;
-    /*
-      case R.id.menu_item_search:
-        Log.d(TAG, "Search");
-        Analytics.getInstance(this).trackEvent(Analytics.USER_ACTION_CATEGORY,
-            Analytics.MENU_ITEM, Analytics.SEARCH_REQUESTED_LABEL, 1);
-        onSearchRequested();
-        break;
-      case R.id.menu_item_settings:
-        Log.d(TAG, "Settings");
-        Analytics.getInstance(this).trackEvent(Analytics.USER_ACTION_CATEGORY,
-            Analytics.MENU_ITEM, Analytics.SETTINGS_OPENED_LABEL, 1);
-        startActivity(new Intent(this, EditSettingsActivity.class));
-        break;
-      case R.id.menu_item_help:
-        Log.d(TAG, "Help");
-        Analytics.getInstance(this).trackEvent(Analytics.USER_ACTION_CATEGORY,
-            Analytics.MENU_ITEM, Analytics.HELP_OPENED_LABEL, 1);
-        showDialog(DialogFactory.DIALOG_ID_HELP);
-        break;
-      case R.id.menu_item_dim:
-        Log.d(TAG, "Toggling nightmode");
-        nightMode = !nightMode;
-        sharedPreferences.edit().putString(ActivityLightLevelManager.LIGHT_MODE_KEY,
-            nightMode ? "NIGHT" : "DAY").commit();
-        Analytics.getInstance(this).trackEvent(Analytics.USER_ACTION_CATEGORY,
-            Analytics.MENU_ITEM, Analytics.TOGGLED_NIGHT_MODE_LABEL, nightMode ? 1 : 0);
-        break;
-      case R.id.menu_item_time:
-        Log.d(TAG, "Starting Time Dialog from menu");
-        Analytics.getInstance(this).trackEvent(Analytics.USER_ACTION_CATEGORY,
-            Analytics.MENU_ITEM, Analytics.TIME_TRAVEL_OPENED_LABEL, 1);
-        if (!timePlayerUI.isShown()) {
-          Log.d(TAG, "Resetting time in time travel dialog.");
-          controller.goTimeTravel(new Date());
-        } else {
-          Log.d(TAG, "Resuming current time travel dialog.");
-        }
-        showDialog(DialogFactory.DIALOG_ID_TIME_TRAVEL);
-        break;
-      case R.id.menu_item_gallery:
-        Log.d(TAG, "Loading gallery");
-        Analytics.getInstance(this).trackEvent(Analytics.USER_ACTION_CATEGORY,
-            Analytics.MENU_ITEM, Analytics.GALLERY_OPENED_LABEL, 1);
-        startActivity(new Intent(this, ImageGalleryActivity.class));
-        break;
-      case R.id.menu_item_tos:
-        Log.d(TAG, "Loading ToS");
-        Analytics.getInstance(this).trackEvent(Analytics.USER_ACTION_CATEGORY,
-            Analytics.MENU_ITEM, Analytics.TOS_OPENED_LABEL, 1);
-        showDialog(DialogFactory.DIALOG_EULA_NO_BUTTONS);
-        break;*/
       default:
         Log.e(TAG, "Unwired-up menu item");
         return false;
@@ -467,32 +428,142 @@ public class DynamicStarMapActivity extends Activity implements OnSharedPreferen
     }
     setAutoMode(mode);
   }
-
-  @Override
-  public boolean onTouchEvent(MotionEvent event) {
-    //Log.d(TAG, "Touch event " + event);
-	Log.d(TAG, "      ");
-	Log.d(TAG, "      ");
-	Log.d(TAG, "-------------------------------------");
-    Log.d(TAG, "X: " + event.getX() + " Y: " + event.getY());
-    //Log.d(TAG, "Orientation: " + getResources().getConfiguration().orientation);
-    Log.d(TAG, "Line of sight X: " + model.getPointing().getLineOfSightX());
-    Log.d(TAG, "Perpendicular X: " + model.getPointing().getPerpendicularX());
-    
-    // Either of the following detectors can absorb the event, but one
-    // must not hide it from the other
-    boolean eventAbsorbed = false;
-    if (gestureDetector.onTouchEvent(event)) {
+  
+  public Vector3 GetWorldCoords( Vector3 touch, float width, float height)
+  {  
+      // Initialize auxiliary variables.
+	  Vector3 worldPos = new Vector3(0.f, 0.f, 0.f);
       
-      /*SpaceObjectObservation obs = new SpaceObjectObservation(user, title, dateObserved, ra, dec, raEnd, decEnd, magnitude, type, reliability, comment)
-      getHelper().getSpaceObjectObservationDao().create(obs);*/
-      eventAbsorbed = true;
-    }
-    if (dragZoomRotateDetector.onTouchEvent(event)) {
-      eventAbsorbed = true;
-    }
-    return eventAbsorbed;
+      // SCREEN height & width (ej: 320 x 480)
+      float screenW = width;
+      float screenH = height;
+             
+      // Auxiliary matrix and vectors
+      // to deal with ogl.
+      float[] invertedMatrix, transformMatrix,
+          normalizedInPoint, outPoint;
+      invertedMatrix = new float[16];
+      transformMatrix = new float[16];
+      normalizedInPoint = new float[4];
+      outPoint = new float[4];
+
+      // Invert y coordinate, as android uses
+      // top-left, and ogl bottom-left.
+      int oglTouchY = (int) (screenH - touch.y);
+      
+      /* Transform the screen point to clip
+      space in ogl (-1,1) */       
+      normalizedInPoint[0] =
+       (float) ((touch.x) * 2.0f / screenW - 1.0);
+      normalizedInPoint[1] =
+       (float) ((oglTouchY) * 2.0f / screenH - 1.0);
+      normalizedInPoint[2] = - 1.0f;
+      normalizedInPoint[3] = 1.0f;
+
+      float[] project = (float[]) IntentHelper.getObjectForKey("projection_matrix");
+      float[] model = (float[]) IntentHelper.getObjectForKey("model_matrix");
+      int [] viewport = (int[]) IntentHelper.getObjectForKey("view_port");
+      float[] output = new float[4];
+      
+      GLU.gluUnProject(touch.x, oglTouchY, 0, model, 0, project, 0, viewport, 0, output, 0);
+      
+//
+//      if (null != project && null != model) {
+//	      
+//	      /* Obtain the transform matrix and
+//	      then the inverse. */
+//	      Matrix.multiplyMM(
+//	          transformMatrix, 0,
+//	          project, 0,
+//	          model, 0);
+//	      Matrix.invertM(invertedMatrix, 0,
+//	          transformMatrix, 0);       
+//	
+//	      /* Apply the inverse to the point
+//	      in clip space */
+//	      Matrix.multiplyMV(
+//	          outPoint, 0,
+//	          invertedMatrix, 0,
+//	          normalizedInPoint, 0);
+//	      
+//	      if (outPoint[3] == 0.0)
+//	      {
+//	          // Avoid /0 error.
+//	          Log.e("World coords", "ERROR!");
+//	          return worldPos;
+//	      }
+//	      
+//	      // Divide by the 3rd component to find
+//	      // out the real position.
+	      worldPos.assign(
+	          output[0],
+	          output[1],
+	          output[2]);
+//      }
+      return worldPos;
   }
+  
+  
+	@SuppressWarnings("deprecation")
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+
+//		// Log.d(TAG, "Touch event " + event);
+//		
+//		Log.d(TAG, "      ");
+//		Log.d(TAG, "      ");
+//		Log.d(TAG, "-------------------------------------");
+//		Log.d(TAG, "X: " + event.getX() + " Y: " + event.getY());
+//		Display display = getWindowManager().getDefaultDisplay();
+//		Vector3 world_coor = GetWorldCoords(
+//				new Vector3(event.getX(), event.getY(), 0), display.getWidth(),
+//				display.getHeight());
+//		Log.d(TAG, "World Coordinates: ");
+//		Log.d(TAG, "x = " + world_coor.x);
+//		Log.d(TAG, "y = " + world_coor.y);
+//		Log.d(TAG, "z = " + world_coor.z);
+//		try {
+//			float x = world_coor.x;
+//			float y = world_coor.y;
+//			float r = (float) Math.sqrt((Math.pow(x, 2) + Math.pow(y, 2)));
+//			float theta = (float) Math.toDegrees((Math.atan(y / x)));
+//			if ((x < 0 && y >= 0) || (x < 0 && y < 0)) {
+//				theta = 180.f + theta;
+//			} else if (x > 0 && y < 0) {
+//				theta = 360.f + theta;
+//			}
+//			r *= 100;
+//			Log.d(TAG, "Ra = " + r);
+//			Log.d(TAG, "Dec = " + theta);
+//			Dao<SpaceObjectObservation, Integer> spaceObjectObservationDao = getHelper()
+//					.getSpaceObjectObservationDao();
+//			Dao<User, Integer> userDao = getHelper().getUserDao();
+//			SpaceObjectObservation spaceObs = new SpaceObjectObservation(
+//					userDao.queryForId(1), "Titre", new Date(), theta, r,
+//					theta, r, 1, "String", "Realiabity", "Ma que c boo");
+//			spaceObjectObservationDao.create(spaceObs);
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+
+		// Either of the following detectors can absorb the event, but one
+		// must not hide it from the other
+		boolean eventAbsorbed = false;
+		if (gestureDetector.onTouchEvent(event)) {
+
+			/*
+			 * SpaceObjectObservation obs = new SpaceObjectObservation(user,
+			 * title, dateObserved, ra, dec, raEnd, decEnd, magnitude, type,
+			 * reliability, comment)
+			 * getHelper().getSpaceObjectObservationDao().create(obs);
+			 */
+			eventAbsorbed = true;
+		}
+		if (dragZoomRotateDetector.onTouchEvent(event)) {
+			eventAbsorbed = true;
+		}
+		return eventAbsorbed;
+	}
 
   @Override
   public boolean onTrackballEvent(MotionEvent event) {
@@ -534,7 +605,6 @@ public class DynamicStarMapActivity extends Activity implements OnSharedPreferen
     skyView.setEGLConfigChooser(false);
     SkyRenderer renderer = new SkyRenderer(getResources());
     skyView.setRenderer(renderer);
-
     rendererController = new RendererController(renderer, skyView);
     // The renderer will now call back every frame to get model updates.
     rendererController.addUpdateClosure(

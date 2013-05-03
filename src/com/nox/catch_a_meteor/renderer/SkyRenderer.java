@@ -14,6 +14,7 @@
 
 package com.nox.catch_a_meteor.renderer;
 
+import com.nox.catch_a_meteor.IntentHelper;
 import com.nox.catch_a_meteor.units.GeocentricCoordinates;
 import com.nox.catch_a_meteor.units.Vector3;
 import com.nox.catch_a_meteor.util.Matrix4x4;
@@ -38,15 +39,18 @@ import java.util.TreeSet;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+import javax.microedition.khronos.opengles.GL11;
 
 public class SkyRenderer implements GLSurfaceView.Renderer {
   private SkyBox mSkyBox = null;
   private OverlayManager mOverlayManager = null;
 
   private RenderState mRenderState = new RenderState();
-
+  
   private Matrix4x4 mProjectionMatrix;
   private Matrix4x4 mViewMatrix;
+  private float[] model_matrix = new float[16];
+  private float[] projection_matrix = new float[16];
 
   // Indicates whether the transformation matrix has changed since the last
   // time we started rendering
@@ -134,6 +138,19 @@ public class SkyRenderer implements GLSurfaceView.Renderer {
     for (UpdateClosure update : mUpdateClosures) {
       update.run();
     }
+    
+    GL11 gl11 = (GL11) gl;
+    
+    gl11.glGetFloatv(GL11.GL_MODELVIEW_MATRIX, model_matrix, 0);
+    gl11.glGetFloatv(GL11.GL_PROJECTION_MATRIX, projection_matrix, 0);
+
+    int[] viewport = new int[4];
+    gl11.glGetIntegerv(GL11.GL_VIEWPORT, viewport, 0);           // Retrieves The Viewport Values (X, Y, Width, Height)
+
+    
+    IntentHelper.addObjectForKey(projection_matrix, "projection_matrix");
+    IntentHelper.addObjectForKey(model_matrix, "model_matrix");
+    IntentHelper.addObjectForKey(viewport, "view_port");
   }
 
   public void onSurfaceCreated(GL10 gl, EGLConfig config) {

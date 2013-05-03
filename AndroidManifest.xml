@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.nox.catch_a_meteor"
     android:installLocation="auto"
-    android:versionCode="1112"
-    android:versionName="1.6.4"
+    android:versionCode="0002"
+    android:versionName="0.2001"
     android:vmSafeMode="false" >
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
