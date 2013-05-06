@@ -27,7 +27,12 @@
         android:title="Info"
 		android:icon="@android:drawable/ic_menu_info_details"
         />
-
+    <item 
+        android:id="@+id/menu_item_search"
+        android:orderInCategory="1"
+        android:title="Cancel search"
+		android:icon="@android:drawable/ic_menu_compass"
+        />
     <!-- Disable the following for the next release. -->
     <!-- TODO(johntaylor): temporary placement until there's an on-screen button -->
     <!--  item android:id="@+id/menu_item_control_panel"

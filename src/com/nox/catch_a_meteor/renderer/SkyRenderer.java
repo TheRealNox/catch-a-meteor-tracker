@@ -29,6 +29,7 @@ import android.opengl.GLSurfaceView;
 import android.opengl.GLU;
 import android.util.FloatMath;
 import android.util.Log;
+import android.view.MotionEvent;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -51,6 +52,7 @@ public class SkyRenderer implements GLSurfaceView.Renderer {
   private Matrix4x4 mViewMatrix;
   private float[] model_matrix = new float[16];
   private float[] projection_matrix = new float[16];
+  private int[] viewport = new int[4];
 
   // Indicates whether the transformation matrix has changed since the last
   // time we started rendering
@@ -143,10 +145,7 @@ public class SkyRenderer implements GLSurfaceView.Renderer {
     
     gl11.glGetFloatv(GL11.GL_MODELVIEW_MATRIX, model_matrix, 0);
     gl11.glGetFloatv(GL11.GL_PROJECTION_MATRIX, projection_matrix, 0);
-
-    int[] viewport = new int[4];
     gl11.glGetIntegerv(GL11.GL_VIEWPORT, viewport, 0);           // Retrieves The Viewport Values (X, Y, Width, Height)
-
     
     IntentHelper.addObjectForKey(projection_matrix, "projection_matrix");
     IntentHelper.addObjectForKey(model_matrix, "model_matrix");

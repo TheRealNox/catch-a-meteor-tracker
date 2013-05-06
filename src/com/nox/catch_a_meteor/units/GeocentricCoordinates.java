@@ -15,6 +15,7 @@
 package com.nox.catch_a_meteor.units;
 
 import android.util.FloatMath;
+import android.util.Log;
 
 import com.nox.catch_a_meteor.util.Geometry;
 
@@ -46,7 +47,7 @@ public class GeocentricCoordinates extends Vector3 {
     this.y = FloatMath.sin(raRadians) * FloatMath.cos(decRadians);
     this.z = FloatMath.sin(decRadians);
   }
-
+  
   /**
    * Convert ra and dec to x,y,z where the point is place on the unit sphere.
    */

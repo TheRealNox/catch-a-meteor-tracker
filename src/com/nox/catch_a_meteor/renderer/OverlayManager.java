@@ -18,6 +18,7 @@ import android.content.res.Resources;
 import android.opengl.GLU;
 import android.util.Log;
 
+import com.nox.catch_a_meteor.IntentHelper;
 import com.nox.catch_a_meteor.R;
 import com.nox.catch_a_meteor.units.GeocentricCoordinates;
 import com.nox.catch_a_meteor.units.Vector3;
@@ -131,6 +132,7 @@ public class OverlayManager extends RendererObjectManager {
     mSearchHelper.setTarget(target, targetName);
     Vector3 transformedPosition = Matrix4x4.multiplyMV(mGeoToViewerTransform, target);
     mSearchArrow.setTarget(transformedPosition);
+    IntentHelper.addObjectForKey(transformedPosition, "transformedPosition");
     queueForReload(false);
   }
 

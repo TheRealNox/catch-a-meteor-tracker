@@ -246,6 +246,7 @@ containing a value of this type.
         public static final int manual_auto_toggle=0x7f0d0026;
         public static final int menu_item_calendar=0x7f0d003c;
         public static final int menu_item_info=0x7f0d003d;
+        public static final int menu_item_search=0x7f0d003e;
         public static final int pager=0x7f0d000b;
         public static final int pickDate=0x7f0d002c;
         public static final int pickTime=0x7f0d002d;

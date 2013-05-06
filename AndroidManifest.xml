@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.nox.catch_a_meteor"
     android:installLocation="auto"
-    android:versionCode="0002"
+    android:versionCode="0002001"
     android:versionName="0.2001"
     android:vmSafeMode="false" >
 
