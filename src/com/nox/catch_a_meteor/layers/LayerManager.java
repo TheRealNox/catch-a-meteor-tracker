@@ -47,6 +47,26 @@ public class LayerManager implements OnSharedPreferenceChangeListener {
     this.layers.add(layer);
   }
 
+  /**
+   * Returns the layer matching the given layer name, null if not found
+   */
+  public Layer getLayer(String layerName) {
+	  for (Layer layer : layers) {
+	      if (layer.getLayerName().equals(layerName)) {
+	    	  return layer;
+	      }
+	  }
+	return null;
+  }
+  
+  /**
+   * Refresh a specific layer matching a given name, by re-initializing it
+   * @param layerName : the name of the layer to refresh
+   */
+  public void refreshLayer(String layerName) {
+	  	getLayer(layerName).initialize();
+  }
+  
   public void initialize() {
     for (Layer layer : layers) {
       layer.initialize();
@@ -78,13 +98,13 @@ public class LayerManager implements OnSharedPreferenceChangeListener {
   public String getName() {
     return "Layer Manager";
   }
-
+  
   /**
    * Search all visible layers for an object with the given name.
    * @param name the name to search for
    * @return a list of all matching objects.
    */
-  public List<SearchResult> searchByObjectName(String name) {
+   public List<SearchResult> searchByObjectName(String name) {
     ArrayList<SearchResult> all = new ArrayList<SearchResult>();
     for (Layer layer : layers) {
       if (isLayerVisible(layer)) {

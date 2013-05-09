@@ -29,7 +29,9 @@ import com.nox.catch_a_meteor.control.MagneticDeclinationCalculatorSwitcher;
 import com.nox.catch_a_meteor.dao.DatabaseHelper;
 
 import com.nox.catch_a_meteor.kml.KmlManager;
+import com.nox.catch_a_meteor.layers.Layer;
 import com.nox.catch_a_meteor.layers.LayerManager;
+import com.nox.catch_a_meteor.layers.SpaceObjectObservationLayer;
 
 import com.nox.catch_a_meteor.model.SpaceObjectObservation;
 import com.nox.catch_a_meteor.model.User;
@@ -518,13 +520,13 @@ public class DynamicStarMapActivity extends Activity implements
 			Log.d(TAG, "y = " + world_coor.y);
 			Log.d(TAG, "z = " + world_coor.z);
 
-			GeocentricCoordinates worldCoor = new GeocentricCoordinates(
+			/*GeocentricCoordinates worldCoor = new GeocentricCoordinates(
 					world_coor.x, world_coor.y, world_coor.z);
 			worldCoor.updateFromRaDec(new RaDec((float) 279.30002,
 					(float) 38.78));
 			Log.d(TAG, "Geocentric: " + worldCoor);
 
-			rendererController.queueEnableSearchOverlay(worldCoor, "New Obs");
+			rendererController.queueEnableSearchOverlay(worldCoor, "New Obs");*/
 			searchMode = true;
 			// rendererController.queueDisableSearchOverlay();
 
@@ -559,6 +561,8 @@ public class DynamicStarMapActivity extends Activity implements
 						userDao.queryForId(1), "Titre", new Date(), ra, dec,
 						ra, dec, 1, "String", "Realiabity", "Ma que c boo");
 				spaceObjectObservationDao.create(spaceObs);
+				
+				StardroidApplication.layerManager.refreshLayer("Meteor observations");
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

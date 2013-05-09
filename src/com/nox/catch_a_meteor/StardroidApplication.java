@@ -66,7 +66,7 @@ public class StardroidApplication extends Application {
   // things it needs; there seems to be no easy way for a ContentProvider
   // to access its Application object.
   private static AstronomerModel model;
-  private static LayerManager layerManager;
+  public static LayerManager layerManager;
   private static ExecutorService backgroundExecutor;
 
   private DatabaseHelper databaseHelper = null;
@@ -179,7 +179,7 @@ public class StardroidApplication extends Application {
         }
 	    
 	    List<SpaceObjectObservation> spaceObjectObservations = spaceObjectObservationDao.queryForAll();
-	    layerManager.addLayer(new SpaceObjectObservationLayer(getModel(), resources, spaceObjectObservations));
+	    layerManager.addLayer(new SpaceObjectObservationLayer(getModel(), resources, helper));
 	  } catch (SQLException e) {
         e.printStackTrace();
 	  }
